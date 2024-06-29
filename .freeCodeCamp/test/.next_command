@@ -26,3 +26,6 @@ __vsc_original_prompt_command=${PROMPT_COMMAND:-}
 git remote set-url origin https://github.com/jacobp11/World-Cup-Database.git
 git branch -M main
 git push -u origin main
+create database worldcup
+psql --username=freecodecamp --dbname=postgres
+pg_dump -cC --inserts -U freecodecamp worldcup > worldcup.sql
