@@ -17,16 +17,46 @@ echo $($PSQL "TRUNCATE games, teams")
 # Looping through games.csv
 cat games_test.csv | while IFS="," read YEAR ROUND WINNER OPPONENT WINNER_GOALS OPPONENT_GOALS
 do
+  
   if [[ $WINNER != "winner" ]]
   then
-    # get winner
-    WINNER=$($PSQL "SELECT winner FROM teams WHERE winner='$TEAM'")
+    # get winner_id
+    WINNER_ID=$($PSQL "SELECT team_id FROM teams WHERE name='$WINNER'")
 
     # if not found
-    if [[ -z $WINNER ]]
+    if [[ -z $WINNER_ID ]]
     then
+      INSERT_WINNER_ID=$($PSQL "INSERT INTO teams(name) VALUES('$WINNER')")
+
       # insert winner
-      INSERT_WINNER_RESULT=$($PSQL "INSERT INTO teams(winner) VALUES('$TEAM')")
+      if [[ $INSERT_WINNER_ID == "INSERT 0 1" ]]
+      then
+        echo Inserted into teams, $WINNER
+      fi
+
+      # get new winner_id
+      WINNER_ID=$($PSQL "SELECT team_id FROM teams WHERE name='$WINNER'")
+    fi
+  fi
+
+  if [[ $OPPONENT != 'opponent' ]]
+  then
+    # get opponent_id
+    OPPONENT_ID=$($PSQL "SELECT team_id FROM teams WHERE name='$OPPONENT'")
+
+    # if not found
+    if [[ -z $OPPONENT_ID ]]
+    then
+      INSERT_OPPONENT_ID=$($PSQL "INSERT INTO teams(name) VALUES('$OPPONENT')")
+
+      # insert opponent_id
+      if [[ $INSERT_OPPONENT_ID == "INSERT 0 1" ]]
+      then
+        echo Inserted into teams, $OPPONENT
+      fi
+
+      # get opponent_id
+      OPPONENT_ID=$($PSQL "SELECT team_id FROM teams WHERE name='$OPPONENT'")
     fi
   fi
 done
