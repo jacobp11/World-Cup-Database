@@ -140,6 +140,10 @@ ALTER TABLE ONLY public.teams ALTER COLUMN team_id SET DEFAULT nextval('public.t
 -- Data for Name: teams; Type: TABLE DATA; Schema: public; Owner: freecodecamp
 --
 
+INSERT INTO public.teams VALUES (21, 'France');
+INSERT INTO public.teams VALUES (22, 'Croatia');
+INSERT INTO public.teams VALUES (23, 'Belgium');
+INSERT INTO public.teams VALUES (24, 'England');
 
 
 --
@@ -153,7 +157,7 @@ SELECT pg_catalog.setval('public.games_game_id_seq', 1, false);
 -- Name: teams_team_id_seq; Type: SEQUENCE SET; Schema: public; Owner: freecodecamp
 --
 
-SELECT pg_catalog.setval('public.teams_team_id_seq', 1, false);
+SELECT pg_catalog.setval('public.teams_team_id_seq', 24, true);
 
 
 --
