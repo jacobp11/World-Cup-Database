@@ -94,3 +94,4 @@ __vsc_original_prompt_command=${PROMPT_COMMAND:-}
 chmod +x insert_data.sh
 chmod +x queries.sh
 cp games.csv games_test.csv
+pg_dump -cC --inserts -U freecodecamp worldcup > worldcup.sql
