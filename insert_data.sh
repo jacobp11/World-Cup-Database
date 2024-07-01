@@ -14,8 +14,8 @@ fi
 # Ensure tables are empty before inserting data
 echo $($PSQL "TRUNCATE games, teams")
 
-# Looping through games.csv
-cat games_test.csv | while IFS="," read YEAR ROUND WINNER OPPONENT WINNER_GOALS OPPONENT_GOALS
+# Looping through games.csv to populate the teams table
+cat games.csv | while IFS="," read YEAR ROUND WINNER OPPONENT WINNER_GOALS OPPONENT_GOALS
 do
   
   if [[ $WINNER != "winner" ]]
@@ -39,7 +39,7 @@ do
     fi
   fi
 
-  if [[ $OPPONENT != 'opponent' ]]
+  if [[ $OPPONENT != "opponent" ]]
   then
     # get opponent_id
     OPPONENT_ID=$($PSQL "SELECT team_id FROM teams WHERE name='$OPPONENT'")
@@ -55,8 +55,16 @@ do
         echo Inserted into teams, $OPPONENT
       fi
 
-      # get opponent_id
+      # get new opponent_id
       OPPONENT_ID=$($PSQL "SELECT team_id FROM teams WHERE name='$OPPONENT'")
     fi
   fi
+
+  # inserting data from games.csv into the games table
+  if [[ $YEAR != 'year' ]]
+  then
+    INSERT_INTO_GAME=$($PSQL "INSERT INTO games(year, round, winner_id, opponent_id, winner_goals, opponent_goals) VALUES($YEAR, '$ROUND', $WINNER_ID, $OPPONENT_ID, $WINNER_GOALS, $OPPONENT_GOALS)")
+  fi
+
+  echo Inserted into games: $YEAR, $WINNER, $OPPONENT
 done
